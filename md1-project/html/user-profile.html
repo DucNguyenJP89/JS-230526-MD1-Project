@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="../css/user-profile.css">
+    <title>Facebook</title>
+</head>
+<body>
+    <nav class="fb-navbar">
+        <div class="left-nav">
+            <div class="fb-logo">
+                <a href="#" class="logo-text">facebook</a>
+            </div>
+            <div class="search-bar">
+                <input type="text" name="search-bar" id="search-bar" placeholder="Facebookを検索">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+        </div>
+        <div class="profile-avatar" id="nav-profile-avatar">
+        </div>
+    </nav>
+    <div class="left-panel">
+        <div class="fb-left-nav-link">
+            <div class="fb-left-nav-item">
+                <div class="fb-left-nav-wrap">
+                    <div class="fb-left-nav-icon"><a href="./home.html"><i class="fa-solid fa-house"></i></a></div>
+                </div>
+            </div>
+            <div class="fb-left-nav-item active">
+                <div class="fb-left-nav-wrap" id="fb-left-user-link">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main">
+        <div class="main-profile">
+            <div class="top-container">
+                <div class="cover-container">
+                    <img src="https://picsum.photos/seed/picsum/1100/400" alt="cover-photo">
+                </div>
+                <div class="top-profile-info">
+                    <div class="user-info-container">
+                        <div class="user-avatar">
+                            <img src="../img/avatar.jpg" alt="user-avatar">
+                        </div>
+                        <div class="user-infos">
+                            <div class="user-name">
+                                グエン　ドゥック
+                            </div>
+                            <div class="user-friends">
+                                <div class="friends-count">
+                                    友達100人
+                                </div>
+                                <div class="friends-group">
+                                    <div class="friend-item">
+                                        <img src="https://picsum.photos/seed/picsum/50" alt="friend-avatar">
+                                    </div>
+                                    <div class="friend-item">
+                                        <img src="https://picsum.photos/seed/picsum/50" alt="friend-avatar">
+                                    </div>
+                                    <div class="friend-item">
+                                        <img src="https://picsum.photos/seed/picsum/50" alt="friend-avatar">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="user-info-links">
+                    <ul class="links-group">
+                        <li class="link-active"><a href="">投稿</a></li>
+                        <li><a href="">友達</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="user-feeds-container">
+                <div class="user-details-container"></div>
+                <div class="fb-home-content">
+                    <div class="home-feed-create-post">
+                        <div class="create-post-input-area" id="create-post-input">
+                        </div>
+                        <div class="create-post-reactions-area">
+                            <div class="reactions-item">
+                                <i class="fa-solid fa-video"></i>
+                                <span>ライブ動画</span>
+                            </div>
+                            <div class="reactions-item">
+                                <i class="fa-regular fa-images"></i>
+                                <span>写真・動画</span>
+                            </div>
+                            <div class="reactions-item">
+                                <i class="fa-regular fa-face-laugh"></i>
+                                <span>気分・アクティビティ</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="home-feeds-list" id="home-feeds-list">
+                        <div class="home-feeds-item">
+                            <div class="feed-item-header">
+                                <div class="feed-item-avatar">
+                                    <img class="home-feed-img" src="https://picsum.photos/100?random=5" alt="feed-avatar">
+                                </div>
+                                <div class="feed-item-username">
+                                    <div>Duc Nguyen</div>
+                                    <span>4時間</span>
+                                </div>
+                            </div>
+                            <div class="feed-item-caption">
+                                This is the caption of one feed
+                            </div>
+                            <div class="feed-item-image">
+                                <img class="img-first" src="https://picsum.photos/800?random=5" alt="image">
+                                <img class="img-next" src="https://picsum.photos/800?random=6" alt="image">
+                                <img class="img-next" src="https://picsum.photos/800?random=7" alt="image">
+                                <img class="img-next" src="https://picsum.photos/800?random=8" alt="image">
+                            </div>
+                            <div class="feed-item-reactions">
+                                <div class="feed-item-likes">
+                                    <i class="fa-solid fa-thumbs-up"></i>
+                                    <span>5</span>
+                                </div>
+                                <div class="feed-item-comments">
+                                    コメント10件
+                                </div>
+                            </div>
+                            <div class="feed-item-actions">
+                                <div class="feed-item-action-like">
+                                    <i class="fa-regular fa-thumbs-up"></i>
+                                    <span>いいね！</span>
+                                </div>
+                                <div class="feed-item-action-comment">
+                                    <i class="fa-regular fa-message"></i>
+                                    <span>コメント</span>
+                                </div>
+                            </div>
+                            <div class="feed-item-comments-list">
+                                <div class="comments-list-area">
+                                    <div class="comment-item">
+                                        <div class="comment-item-avatar">
+                                            <img class="home-feed-img" src="https://picsum.photos/seed/picsum/100" alt="comment-avatar">
+                                        </div>
+                                        <div class="comment-item-content">
+                                            <div class="wrap">
+                                                <div class="comment-username">user1</div>
+                                                <div>Comment content here</div>
+                                            </div>
+                                            <div class="comment-item-actions">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="comment-item">
+                                        <div class="comment-item-avatar">
+                                            <img class="home-feed-img" src="https://picsum.photos/seed/picsum/100" alt="comment-avatar">
+                                        </div>
+                                        <div class="comment-item-content">
+                                            <div class="wrap">
+                                                <div class="comment-username">user1</div>
+                                                <div>Comment content here</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="add-post-comment">
+                                    <div class="add-post-avatar">
+                                        <img class="home-feed-img" src="../img/avatar.jpg" alt="user-avatar">
+                                    </div>
+                                    <div class="add-post-content">
+                                        <textarea name="add-post-content" id="post-id" placeholder="コメントを入力"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="../js/user-profile.js"></script>    
+</body>
+</html>

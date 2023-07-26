@@ -1,0 +1,656 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Helvetica Neue, Helvetica, Arial, "hiragino kaku gothic pro",meiryo,"ms pgothic",sans-serif;
+    -webkit-font-smoothing: subpixel-antialiased
+}
+
+/* css for the top nav bar */
+.fb-navbar {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+}
+
+.left-nav {
+    width: 80%;
+    display: flex;
+    align-items: center;
+}
+
+.left-nav .fb-logo {
+    width: 25%;
+    padding-left: 16px;
+}
+
+.fb-logo a {
+    text-decoration: none;
+    color: #1877f2;
+    letter-spacing: -1px;
+}
+
+.logo-text {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.search-bar {
+    margin-left: 60px;
+    width: 580px;
+    position: relative;
+}
+
+.search-bar input {
+    margin: 8px 10px;
+    padding: 8px 12px;  
+    padding-left: 32px;  
+    width: 100%;
+    border: none;
+    border-radius: 20px;
+    background-color: rgba(193, 198, 204, 0.2);
+    font-size: 14px;
+    height: 36px;
+}
+
+.search-bar input::placeholder {
+    color: #606770;
+    font-weight: 300;
+}
+
+.search-bar i {
+    color: #606770;
+    position: absolute;
+    top: 18px;
+    left: 20px;
+}
+
+.profile-avatar {
+    position: relative;
+    padding-top: 8px;
+}
+
+.profile-avatar img {
+    width: 38px;
+    height: 38px;
+    border: 1px solid #606770;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.profile-avatar .icon-wrap {
+    position: absolute;
+    bottom: -2px;
+    right: 20px;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    background-color: #dedde1;
+}
+
+.profile-avatar i {
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    color: #1c1e21;
+    font-size: 8px;
+}
+
+/* css for the logout container */
+.user-logout {
+    width: 200px;
+    background-color: #fff;
+    border-radius: 8px;
+    border: 1px solid rgb(96, 103, 112, 0.3);
+    z-index: 9999;
+    position: absolute;
+    right: 20px;
+    top: 50px;
+    box-shadow: 5px 5px 20px #dadde1;
+    display: none;
+}
+
+.user-logout .logout-container {
+    margin: 10px;
+    padding: 10px 12px;
+}
+
+.user-logout .logout-container:hover {
+    background-color: rgb(96, 103, 112, 0.3);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* css for the main section of home feeds */
+.fb-main {
+    margin-top: 52px;
+    display: flex;
+    justify-content: space-between;
+    background-color: #f1f2f5;
+}
+
+.fb-left-panel, .fb-home-panel, .fb-right-panel {
+    height: calc(100vh - 52px);
+    background-color: #f1f2f5;
+}
+
+.fb-right-panel {
+    width: 25%;
+}
+
+/* css for the left panel navigation link */
+.fb-left-panel {
+    width: 22%;
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.fb-left-nav-link {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.fb-left-nav-item {
+    width: 100%;
+    margin-top: 10px;
+    border-left: 4px solid transparent;
+}
+
+/* adjust layout when the link is active */
+.fb-left-nav-item.active {
+    border-left: 4px solid #1877f2;
+}
+
+.fb-left-nav-item.active .fb-left-nav-icon {
+    color: #1877f2;
+}
+
+/* css for one nav link  */
+.fb-left-nav-wrap {
+    width: 80%;
+    padding: 8px;
+    margin-left: 8px;
+    display: flex;
+    column-gap: 10px;
+    align-items: center;
+}
+
+.fb-left-nav-wrap:hover {
+    cursor: pointer;
+    background-color: #dedde1;
+    border: none;
+    border-radius: 8px;
+}
+
+.fb-left-nav-text {
+    font-size: 16px;
+}
+
+.fb-left-nav-text a {
+    text-decoration: none;
+    color: #1c1e21;
+}
+
+.fb-left-nav-icon {
+    width: 30px;
+    text-align: center;
+}
+
+.fb-left-nav-icon img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+
+/* css for the left panel footer link  */
+.fb-left-nav-footer ul {
+    display: flex;
+    flex-wrap: wrap;
+    list-style-type: none;
+    font-size: 12px;
+    padding-left: 24px;
+}
+
+.footer-link a {
+    text-decoration: none;
+    color: #606770;
+}
+
+.footer-link a:hover {
+    text-decoration: underline;
+}
+
+.footer-link li {
+    color: #606770;
+}
+
+/* css for the right panel  */
+.right-panel-ads-container, .right-panel-friends-list-container {
+    margin-top: 16px;
+    padding: 0 8px 0 0;
+}
+
+.right-panel-ads-container .ads-title, .right-panel-friends-list-container .fl-title {
+    margin: 16px 0;
+    padding: 0 8px;
+    font-size: 16px;
+}
+
+.fb-right-panel-ad-list {
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+}
+
+.fb-right-panel-ad-item {
+    display: flex;
+    padding: 8px;
+    column-gap: 10px;
+    align-items: center;
+}
+
+.fb-right-panel-ad-item:hover {
+    background-color: #dedde1;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.fb-right-panel-ad-item .ad-item-image {
+    width: 40%;
+}
+
+.ad-item-image img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.ad-item-text {
+    max-width: 60%;
+}
+
+.ad-item-text p {
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.ad-item-text span {
+    font-size: 0.7rem;
+    color: #606770;
+}
+
+/* css for the friends list in the right panel */
+.friend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.friend-item span {
+    font-size: 16spx;
+    color: #606770;
+}
+
+.friend-avatar .home-feed-img {
+    width: 32px;
+    height: 32px;
+}
+
+/* css for the home panel  */
+.fb-home-panel {
+    width: 720px;
+    overflow-y: auto;
+}
+
+.fb-home-panel::-webkit-scrollbar {
+    display: none;
+}
+
+.fb-home-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+    align-items: center;
+    margin: 0 auto;
+    padding-top: 20px;
+    background-color: #f1f2f5;
+}
+
+/* template for each section  */
+.home-feed-stories-container {
+    width: 95%;
+    height: 200px;
+    background-color: #fff;
+    border: 1px solid rgb(96, 103, 112, 0.3);
+    border-radius: 8px;
+}
+
+
+/* TO DO: css for stories list section  */
+
+/* css for the feed create section  */
+.home-feed-create-post {
+    width: 95%;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid rgb(96, 103, 112, 0.3);
+    border-radius: 8px;
+}
+
+.create-post-input-area {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #dedde1;
+}
+
+.create-post-avatar img {
+    max-width: 100%;
+    width: 38px;
+    height: 38px;
+    margin-right: 10px;
+    border-radius: 50%;
+}
+
+.create-post-input-area .add-post-content {
+    width: 90%;
+}
+
+.add-post-content .create-post-btn {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 8px;
+    background-color: #1877f2;
+    color: #fff;
+    font-size: 14px;
+}
+
+.create-post-btn.disabled {
+    background-color: #dedde1;
+    color: #606770;
+}
+
+.create-post-reactions-area {
+    margin: 8px auto;
+    margin-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.reactions-item {
+    padding: 2px 4px;
+    width: 33%;
+    text-align: center;
+}
+
+.reactions-item:hover {
+    cursor: pointer;
+    background-color: rgba(193, 198, 204, 0.2);
+    border-radius: 6px;
+}
+
+.reactions-item span {
+    font-size: 13px;
+    font-weight: 500;
+    color: #606770;
+}
+
+.reactions-item i {
+    font-size: 18px;
+    vertical-align: middle;
+}
+
+.reactions-item .fa-video {
+    color: #fa383e;
+}
+
+.reactions-item .fa-images {
+    color: #00a400;
+}
+
+.reactions-item .fa-face-laugh {
+    color: #f5c33b;
+}
+
+/* css for the feeds list  */
+.home-feeds-list {
+    width: 95%;
+    background-color: #f1f2f5;
+    margin-bottom: 20px;
+}
+
+.home-feeds-item {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    background-color: #fff;
+    border: 1px solid rgb(96, 103, 112, 0.3);
+}
+
+.feed-item-header {
+    padding: 16px 0;
+    display: flex;
+    align-items: center;
+}
+
+.home-feed-img {
+    width: 38px;
+    height: 38px;
+    margin: 0 10px;
+    border-radius: 50%;
+}
+
+.feed-item-username div {
+    font-size: 16px;
+    margin-bottom: 0;
+    font-weight: bold;
+    height: 16px;
+}
+
+.feed-item-username span {
+    font-size: 12px;
+}
+
+.feed-item-caption {
+    margin: 0 0 10px 10px;
+}
+
+.feed-item-image {
+    width: 100%;
+    height: auto;
+    display: grid;
+    column-gap: 2px;
+    row-gap: 2px;
+    grid-template-columns: auto auto auto;
+}
+
+.feed-item-image img {
+    width: 100%;
+}
+
+.feed-item-image .img-first {
+    grid-column: 1 / span 3;
+}
+
+.feed-item-reactions, .feed-item-actions {
+    display: flex;
+    align-items: center;
+    margin: 16px;
+    margin-bottom: 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #c1c6cc;
+}
+
+.feed-item-action-like, .feed-item-action-comment {
+    padding: 4px 32px;
+    color: #606770;
+}
+
+.feed-item-action-comment a {
+    text-decoration: none;
+    color: #606770;
+}
+
+.feed-item-action-like.clicked {
+    color: #1877f2;
+}
+
+.feed-item-action-like:hover, .feed-item-action-comment:hover {
+    background-color: #dedde1;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.feed-item-reactions {
+    justify-content: space-between;
+}
+
+.feed-item-actions {
+    justify-content: space-evenly;
+}
+
+.feed-item-likes span, .feed-item-comments, .feed-item-actions span {
+    font-size: 14px;
+    color: #606770;
+}
+
+.feed-item-actions span {
+    font-weight: 600;
+}
+
+.feed-item-likes .fa-thumbs-up {
+    color: #1877f2;
+}
+
+.feed-item-comments-list .home-feed-img {
+    width: 32px;
+    height: 32px;
+}
+
+.feed-item-comments-list, .comments-list-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8px 0;
+}
+
+.comment-item, .add-post-comment {
+    display: flex;
+}
+
+.comment-item {
+    align-items: flex-start;
+}
+
+.comment-item-content {
+    margin-bottom: 8px;
+}
+
+.comment-item-content.edit {
+    width: 90%;
+}
+
+.comment-item-content .wrap {
+    /* margin-bottom: 4px; */
+    padding: 10px;
+    background-color: rgb(193, 198, 204, 0.3);
+    border-radius: 12px;
+    font-size: 14px;
+}
+
+.comment-item-content a {
+    font-size: 14px;
+    color: #606770;
+    padding-left: 10px;
+}
+
+.comment-item-content a:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.comment-username {
+    font-weight: bold;
+}
+
+.feed-item-comments-list .add-post-comment {
+    width: 100%;
+}
+
+.add-post-comment .add-post-content, .comment-item-content .add-post-content {
+    width: 90%;
+    margin-right: 10px;
+}
+
+.add-post-content textarea {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 12px;
+    background-color: rgba(193, 198, 204, 0.2);
+    resize: none;
+}
+
+
+@media screen and (max-width: 1100px) {
+    .fb-left-panel {
+        width: 60px;
+        background-color: #fff;
+        border-right: 0.5px solid rgb(96, 103, 112, 0.3);
+    }
+    .fb-left-nav-footer, .fb-left-nav-text {
+        display: none;
+    }
+
+    .fb-left-nav-wrap {
+        margin-left: 2px;
+    }
+}
+
+@media screen and (max-width: 720px) {
+    .fb-left-panel {
+        width: 60px;
+        background-color: #fff;
+        border-right: 0.5px solid rgb(96, 103, 112, 0.3);
+    }
+    .fb-left-nav-footer, .fb-left-nav-text {
+        display: none;
+    }
+
+    .fb-left-nav-wrap {
+        margin-left: 2px;
+    }
+
+    .fb-right-panel {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .fb-left-panel {
+        display: none;
+    }
+
+    .fb-right-panel {
+        display: none;
+    }
+}

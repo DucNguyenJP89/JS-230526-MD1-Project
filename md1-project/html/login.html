@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/login.css">
+    <title>Facebook - ログインまたは登録</title>
+</head>
+
+<body>
+    <div class="main">
+        <div class="content">
+            <div class="about">
+                <h1>facebook</h2>
+                    <h2>Facebookを使うと、友達や同僚、同級生、仲間たちとつながりを深められます。ケータイ、スマートフォンからもアクセスできます。</p>
+            </div>
+            <div class="login-container">
+                <form id="login-form">
+                    <div class="login-form">
+                        <div>
+                            <input type="text" class="login-item" id="login-email" placeholder="メールアドレス">
+                            <span id="login-email-error"></span>
+                        </div>
+                        <div>
+                            <input type="password" name="password" id="login-password" class="login-item" placeholder="パスワード">
+                            <span id="login-password-error"></span>
+                        </div>
+                        <button type="submit" class="login-btn" id="login-btn">ログイン</button>
+                        <div class="forget-password"><a href="#">パスワードを忘れた場合</a></div>
+                        <div class="break-line"></div>
+                        <button class="register-btn" id="register-form-open">新しいアカウントを作成</button>
+                    </div>
+                    <div class="addition-text">
+                        有名人、ブランドまたはビジネスのために<strong>Facebookページを作成</strong>できます。
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="register-section" id="register-form-section">
+            <div class="register-container">
+                <img class="close-img" src="https://static.xx.fbcdn.net/rsrc.php/v3/yZ/r/C6QZ-pcv3Bd.png" alt=""
+                    width="24" height="24" id="register-form-close">
+                <div class="register-title">
+                    <h2>アカウント登録</h2>
+                    <p>簡単に登録できます。</p>
+                </div>
+                <div class="register-form">
+                    <form id="register-form">
+                        <div class="register-input-group" id="register-input-group">
+                            <div>
+                                <input type="text" class="register-item" id="register-first" placeholder="姓" required>
+                                <span id="error-first"></span>
+                            </div>
+                            <div>
+                                <input type="text" class="register-item" id="register-last" placeholder="名" required>
+                                <span id="error-last"></span>
+                            </div>
+                            <div class="register-email">
+                                <input type="text" class="register-item" id="register-email" placeholder="メールアドレス" required>
+                                <span id="error-email"></span>
+                            </div>
+                            <div class="register-password">
+                                <input type="password" class="register-item register-password" id="register-password" placeholder="新しいパスワード" required>
+                                <span id="error-password"></span>
+                            </div>
+                        </div>
+                        <div class="dob">
+                            <div class="title">誕生日</div>
+                            <div class="dob-select">
+                                <select class="register-item" name="dob-year" id="dob-year">
+                                    <option value="1999">1999</option>
+                                    <option value="1998">1998</option>
+                                    <option value="1997">1997</option>
+                                    <option value="1996">1996</option>
+                                    <option value="1995">1995</option>
+                                    <option value="1994">1994</option>
+                                    <option value="1993">1993</option>
+                                    <option value="1992">1992</option>
+                                    <option value="1991">1991</option>
+                                    <option value="1990">1990</option>
+                                    <option value="1989">1989</option>
+                                    <option value="1988">1988</option>
+                                    <option value="1987">1987</option>
+                                    <option value="1986">1986</option>
+                                    <option value="1985">1985</option>
+                                    <option value="1984">1984</option>
+                                    <option value="1983">1983</option>
+                                    <option value="1982">1982</option>
+                                    <option value="1981">1981</option>
+                                    <option value="1980">1980</option>
+                                </select>
+                                <select class="register-item" name="dob-month" id="dob-month">
+                                    <option value="1">1月</option>
+                                    <option value="2">2月</option>
+                                    <option value="3">3月</option>
+                                    <option value="4">4月</option>
+                                    <option value="5">5月</option>
+                                    <option value="6">6月</option>
+                                    <option value="7">7月</option>
+                                    <option value="8">8月</option>
+                                    <option value="9">9月</option>
+                                    <option value="10">10月</option>
+                                    <option value="11">11月</option>
+                                    <option value="12">12月</option>
+                                </select>
+                                <select class="register-item" name="dob-day" id="dob-day">
+                                    <option value="1">1日</option>
+                                    <option value="2">2日</option>
+                                    <option value="3">3日</option>
+                                    <option value="4">4日</option>
+                                    <option value="5">5日</option>
+                                    <option value="6">6日</option>
+                                    <option value="7">7日</option>
+                                    <option value="8">8日</option>
+                                    <option value="9">9日</option>
+                                    <option value="10">10日</option>
+                                    <option value="11">11日</option>
+                                    <option value="12">12日</option>
+                                    <option value="13">13日</option>
+                                    <option value="14">14日</option>
+                                    <option value="15">15日</option>
+                                    <option value="16">16日</option>
+                                    <option value="17">17日</option>
+                                    <option value="18">18日</option>
+                                    <option value="19">19日</option>
+                                    <option value="20">20日</option>
+                                    <option value="21">21日</option>
+                                    <option value="22">22日</option>
+                                    <option value="23">23日</option>
+                                    <option value="24">24日</option>
+                                    <option value="25">25日</option>
+                                    <option value="26">26日</option>
+                                    <option value="27">27日</option>
+                                    <option value="28">28日</option>
+                                    <option value="29">29日</option>
+                                    <option value="30">30日</option>
+                                    <option value="31">31日</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="gender">
+                            <div class="title">性別</div>
+                            <div class="gender-select">
+                                <span class="register-item">
+                                    <label for="gender-female">女性</label>
+                                    <input class="gender-radio" type="radio" name="gender" id="gender-female" value="女性">
+                                </span>
+                                <span class="register-item">
+                                    <label for="gender-male">男性</label>
+                                    <input class="gender-radio" type="radio" name="gender" id="gender-male" value="男性">
+                                </span>
+                                <span class="register-item">
+                                    <label for="gender-other">その他</label>
+                                    <input class="gender-radio" type="radio" name="gender" id="gender-other" value="その他">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="policy-text">
+                            <p>サービスの利用者があなたの連絡先情報をFacebookにアップロードしている場合があります。詳しくはこちら</p>
+                            <p>[アカウント登録]をクリックすることで、利用規約、プライバシーポリシ、Cookieポリシーに同意するものとします。サービスに関連してFacebookからSMS通知が届くことがありますが、これはいつでもオフに設定できます。
+                            </p>
+                        </div>
+                        <div class="register-btn-wrap"><button type="submit" class="register-btn" id="register-submit">アカウント登録</button></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="page-footer">
+        <div>MetaxDucNguyen &copy; 2023</div>
+    </footer>
+    <script type="module" src="../js/login.js"></script>
+</body>
+
+</html>
