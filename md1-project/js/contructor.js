@@ -19,6 +19,7 @@ export class UserFeed {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.content = content;
+        this.status = 1; // 1: valid - 9: invalid
     }
 }
 
@@ -30,5 +31,6 @@ export class FeedComment {
         this.commentText = commentText;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.status = 1; // 1: valid - 9: invalid
     }
 }

@@ -3,13 +3,12 @@ let users = JSON.parse(localStorage.getItem('users')) || [];
 
 // render user information to the list
 let usersTable = document.querySelector('.projects');
-console.log(usersTable);
 
 // add user into users table
 let tableBody = document.getElementsByTagName('tbody')[0];
-console.log(tableBody);
 
 function renderUsers(users) {
+    tableBody.innerHTML = '';
     users.forEach((user) => {
         let userRow = document.createElement('tr');
         let userId = document.createElement('td');
@@ -41,13 +40,12 @@ function renderUsers(users) {
         userStatus.appendChild(statusSpan);
         // add edit link
         let userAction = document.createElement('td');
-        userAction.setAttribute('class','project-actions text-right');
-        userAction.setAttribute('id', user.id);
+        userAction.setAttribute('class', 'project-actions text-right');
+        userAction.setAttribute('id', `${user.id}`);
+        let userStatusText = user.status == 1 ? "Block" : "Activate"
         userAction.innerHTML = `
             <a class="btn btn-info btn-sm" href="#">
-                <i class="fa-regular fa-pen-to-square">
-                </i>
-                Edit
+                ${userStatusText}
             </a>
         `;
         // add element to user row
@@ -67,3 +65,28 @@ if (users.length > 0) {
     renderUsers(users);
 }
 
+// add event listener to handle update user
+tableBody.addEventListener('click', (e) => {
+    // check if update btn selected
+    e.preventDefault();
+    let target = e.target;
+    if (target.parentNode.classList.contains('project-actions')) {
+        console.log('selected');
+        let userId = Number(target.parentNode.id);
+        let userIndex = users.findIndex((user) => user.id == userId);
+        console.log(userIndex);
+        console.log(target.innerText.trim() == 'Block');
+        if (userIndex !== -1) {
+            let user = users[userIndex];
+            // update status of user
+            if (target.innerText.trim() == 'Block') {
+                user.status = 9;
+            } else if (target.innerText.trim() == 'Activate') {
+                user.status = 1;
+            }
+            // update localStorage
+            localStorage.setItem('users', JSON.stringify(users));
+            renderUsers(users);
+        }
+    }
+})

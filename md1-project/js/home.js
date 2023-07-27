@@ -86,9 +86,12 @@ function renderHomeFeedsList() {
     allPosts.forEach((post) => {
         let feedId = post.id;
         let userId = post.userId;
+        let feedStatus = post.status;
         // get user name from userId
         let user = users.find((user) => user.id === userId);
-        if (user.status == 1) {
+        // check if user and feed are valid
+        let check = user.status == 1 && feedStatus == 1;
+        if (check) {
             let userName = user.firstName + " " + user.lastName;
             let content = post.content;
             let updatedAt = new Date(post.updatedAt);
@@ -188,9 +191,12 @@ renderHomeFeedsList();
 allPosts.forEach((post) => {
     let feedId = post.id;
     let userId = post.userId;
+    let feedStatus = post.status;
     // get user name from userId
     let user = users.find((user) => user.id === userId);
-    if (user.status == 1) {
+    // check if post is valid 
+    let check = user.status == 1 && feedStatus == 1;
+    if (check) {
         renderCommentsList(feedId);
     }
 })
@@ -250,7 +256,7 @@ createPostForm.addEventListener('submit', (e) => {
 
 // add event listener to home feeds
 homeFeedsList.addEventListener('click', (e) => {
-    // console.log(e.target.parentNode.tagName);
+    console.log(e.target);
     // if target is the form, then add event press enter to submit a comment
     if (e.target.parentNode.tagName == "FORM") {
         console.log('form selected');
@@ -306,9 +312,39 @@ homeFeedsList.addEventListener('click', (e) => {
             })
         }
     }
+    if (e.target.classList.contains('delete-comment')) {
+        let target = e.target.id;
+        let commentId = target.split("-")[1];
+        console.log(commentId);
+        Swal.fire({
+            text: 'コメントを削除してよろしいでしょうか。',
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonColor: '#dedde1',
+            confirmButtonColor: '#dc3545',
+            confirmButtonText: '削除',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                console.log('confirmed');
+                let commentIndex = comments.findIndex(comment => comment.commentId == commentId);
+                console.log(commentIndex);
+                if (commentIndex != -1) {
+                    let feedId = Number(comments[commentIndex].feedId);
+                    console.log(feedId);
+                    // delete comment in comments list
+                    comments.splice(commentIndex, 1);
+                    console.log(comments);
+                    // update local storage
+                    localStorage.setItem('comments', JSON.stringify(comments));
+                    // re-render comments list of the feed
+                    renderCommentsList(feedId);
+                }
+            }
+        })
+    }
 });
 
-export function renderCommentsList(feedId) {
+function renderCommentsList(feedId) {
     // get the comments list area by feed id
     let commentsListArea = document.getElementById(`list-${feedId}`);
     // clear content of the list
@@ -323,6 +359,9 @@ export function renderCommentsList(feedId) {
         // get the user information
         let user = users.find((user) => user.id === comment.userId);
         let userName = user.firstName + " " + user.lastName;
+        if (user.status != 1) {
+            userName += " (blocked)";
+        }
         let commentItem = document.createElement('div');
         commentItem.classList.add('comment-item');
         // create children div for comment-item
@@ -363,7 +402,8 @@ export function renderCommentsList(feedId) {
                 e.stopPropagation();
                 commentItemContent.classList.remove('edit');
                 commentItemWrap.style.display = 'block';
-                commentItemEdit.style.display = 'block';
+                commentItemEdit.style.display = 'inline-block';
+                commentItemDelete.style.display = 'inline-block';
                 commentFormArea.style.display = 'none';
             })
             let commentItemEdit = document.createElement('a');
@@ -375,9 +415,15 @@ export function renderCommentsList(feedId) {
                 commentItemWrap.style.display = 'none';
                 commentFormArea.style.display = 'block';
                 commentItemEdit.style.display = 'none';
+                commentItemDelete.style.display = 'none';
             })
+            let commentItemDelete = document.createElement('a');
+            commentItemDelete.innerText = '削除';
+            commentItemDelete.classList.add('delete-comment');
+            commentItemDelete.setAttribute('id', `delete-${comment.commentId}`);
             commentItemContent.appendChild(commentFormArea);
             commentItemContent.appendChild(commentItemEdit);
+            commentItemContent.appendChild(commentItemDelete);
         }
         // add comment item content to the comment item
         commentItem.appendChild(commentItemAvatar);

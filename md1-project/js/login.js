@@ -1,7 +1,7 @@
-import {User} from './contructor.js';
+import { User } from './contructor.js';
 // check if user already logged in, then redirect to home page
 let currentUser = JSON.parse(localStorage.getItem('loginUser')) || null;
-if (currentUser) {
+if (currentUser && currentUser.status == 1) {
     window.location.href = '../html/home.html';
 }
 
@@ -32,14 +32,14 @@ let regPwError = document.getElementById('error-password');
 let users = JSON.parse(localStorage.getItem('users')) || [];
 
 // open register form when clicking button create new account
-registerOpenBtn.addEventListener('click', function(e) {
+registerOpenBtn.addEventListener('click', function (e) {
     e.preventDefault();
     console.log('clicked');
     registerFormSection.style.display = 'block';
 });
 
 // close the reg form and clear all values
-registerCloseBtn.addEventListener('click', function() {
+registerCloseBtn.addEventListener('click', function () {
     // reset form
     registerForm.reset();
     // clear error
@@ -49,7 +49,7 @@ registerCloseBtn.addEventListener('click', function() {
 
 // get value of gender
 function getGenderValue(e) {
-    for (let i=0; i < e.length; i ++) {
+    for (let i = 0; i < e.length; i++) {
         if (e[i].checked) {
             return e[i].value;
         }
@@ -72,7 +72,7 @@ function clearRegFormError() {
 let regInputGrp = document.getElementById('register-input-group');
 regInputGrp.addEventListener('focusout', event => {
     console.log('focus out');
-    if(event.target.value == '') {
+    if (event.target.value == '') {
         event.target.classList.add('error');
         switch (event.target.id) {
             case 'register-first':
@@ -149,7 +149,7 @@ function validateRegEmail(email) {
 
 // validate password
 // initiate pw pattern
-let pwPattern =  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+let pwPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 
 //validate register password
 function validateRegPassword(password) {
@@ -190,7 +190,7 @@ function validateRegForm() {
 }
 
 // validate fields when click submit button
-registerForm.addEventListener('submit', function(e) {
+registerForm.addEventListener('submit', function (e) {
     e.preventDefault();
     let isValid = validateRegForm();
     if (isValid) {
@@ -205,7 +205,15 @@ registerForm.addEventListener('submit', function(e) {
         let user = new User(id, firstName, lastName, email, password, birthday, gender, joinedAt);
         users.push(user);
         localStorage.setItem('users', JSON.stringify(users));
-        window.location.href = "../html/login.html";
+        Swal.fire({
+            title: 'Login succeeded',
+            confirmButtonColor: '#1877f2',
+            confirmButtonText: 'Login'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.location.href = '../html/login.html';
+            }
+        });
     }
 });
 
@@ -256,12 +264,20 @@ loginForm.addEventListener('submit', (e) => {
                 clearLoginError();
                 if (user.status !== 1) {
                     loginEmail.classList.add('error');
-                    loginEmailError.innerText = 'Something wrong. Please contact your admin';
+                    loginEmailError.innerText = 'Your account was blocked. Please contact your admin';
                 } else {
                     clearLoginError();
                     user.isLogin = true;
                     localStorage.setItem('loginUser', JSON.stringify(user));
-                    document.location.href = '../html/home.html';
+                    Swal.fire({
+                        title: 'Login succeeded',
+                        confirmButtonColor: '#1877f2',
+                        confirmButtonText: 'Access home feeds'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.location.href = '../html/home.html';
+                        }
+                    });
                 }
             }
         }

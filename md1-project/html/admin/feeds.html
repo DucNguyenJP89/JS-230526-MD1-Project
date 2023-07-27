@@ -29,13 +29,13 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
-                    <a href="../html/admin/users.html" class="nav-link">
+                    <a href="../admin/users.html" class="nav-link">
                         <i class="nav-icon fa-solid fa-users"></i>
                         <p>Users</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="../html/admin/feeds.html" class="nav-link" class="nav-link">
+                    <a href="../admin/feeds.html" class="nav-link" class="nav-link">
                         <i class="nav-icon fa-solid fa-newspaper"></i>
                         <p>Feeds</p>
                     </a>
@@ -43,7 +43,93 @@
             </ul>
         </nav>
     </aside>
+    <div class="content-wrapper" style="min-height: 160.44px;">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Feeds</h1>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Users</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                            <i class="fa-solid fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped projects">
+                        <thead>
+                            <tr>
+                                <th style="width: 8%">
+                                    Feed ID
+                                </th>
+                                <th style="width: 15%">
+                                    User Name (ID)
+                                </th>
+                                <th>
+                                    Content
+                                </th>
+                                <th style="width: 12%">
+                                    Created At
+                                </th>
+                                <th style="width: 12%">
+                                    Updated At
+                                </th>
+                                <th style="width: 8%" class="text-center">
+                                    Status
+                                </th>
+                                <th style="width: 10%">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    #
+                                </td>
+                                <td>
+                                    <a>
+                                        AdminLTE v3
+                                    </a>
+                                    <br>
+                                    <small>
+                                        Created 01.01.2019
+                                    </small>
+                                </td>
+                                <td>
+                                    duc@gmail.com
+                                </td>
+                                <td>
+                                    test12345
+                                </td>
+                                <td>
+                                    Mon 24th July 2023
+                                </td>
+                                <td class="project-state">
+                                    <span class="badge badge-success">Active</span>
+                                </td>
+                                <td class="project-actions">
+                                    <a class="btn btn-info btn-sm" href="#">
+                                        Block
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js?v=3.2.0"></script>
+    <script src="../../js/admin/feeds.js"></script>
 </body>
 
 </html>
