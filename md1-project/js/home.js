@@ -91,6 +91,9 @@ function renderHomeFeedsList() {
         let user = users.find((user) => user.id === userId);
         // check if user and feed are valid
         let check = user.status == 1 && feedStatus == 1;
+        // check if the post is from login user
+        let isLoginUser = post.userId === loginUser.id;
+        // render post only user and feed are valid
         if (check) {
             let userName = user.firstName + " " + user.lastName;
             let content = post.content;
@@ -104,7 +107,10 @@ function renderHomeFeedsList() {
             // create children div inside home feed item - item header
             let feedItemHeader = document.createElement('div');
             feedItemHeader.classList.add('feed-item-header');
-            feedItemHeader.innerHTML = `
+            // create div to display user info
+            let feedUserInfo = document.createElement('div');
+            feedUserInfo.classList.add('feed-user-info');
+            feedUserInfo.innerHTML = `
             <div class="feed-item-avatar">
                 <img class="home-feed-img" src="https://picsum.photos/100" alt="feed-avatar">
             </div>
@@ -112,11 +118,57 @@ function renderHomeFeedsList() {
                 <div>${userName}</div>
                 <span>${date}</span>
             </div>
-        `;
+            `;
+            feedItemHeader.appendChild(feedUserInfo);
             // create children div - item content
             let feedItemContent = document.createElement('div');
             feedItemContent.classList.add('feed-item-caption');
-            feedItemContent.innerText = content;
+            let feedContentText = document.createElement('div');
+            feedContentText.innerText = content;
+            feedItemContent.appendChild(feedContentText);
+            // create a form to edit post content if it is login user post
+            if (isLoginUser) {
+                let feedUserActions = document.createElement('div');
+                feedUserActions.classList.add('feed-user-actions');
+                // create button to edit and delete
+                let feedEditAction = document.createElement('a');
+                feedEditAction.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
+                feedEditAction.addEventListener('click', (e) => {
+
+                })
+                let feedDeleteAction = document.createElement('a');
+                feedDeleteAction.classList.add('delete-feed');
+                feedDeleteAction.setAttribute('id', `delete-${feedId}`);
+                feedDeleteAction.innerHTML = `<i class="fa-regular fa-trash-can"></i>`;
+                // add actions to the div
+                feedUserActions.appendChild(feedEditAction);
+                feedUserActions.appendChild(feedDeleteAction);
+                // add actions to feed header
+                feedItemHeader.appendChild(feedUserActions);
+                let feedEditContentArea = document.createElement('div');
+                feedEditContentArea.classList.add('add-post-content');
+                let feedEditForm = document.createElement('form');
+                feedEditForm.classList.add("edit-feed-form");
+                feedEditForm.setAttribute('id', `edit-feed-${feedId}`);
+                let feedEditTextArea = document.createElement('textarea');
+                feedEditTextArea.setAttribute('id', `edit-feedId-${feedId}`);
+                feedEditTextArea.value = content;
+                feedEditTextArea.addEventListener('focusout', (e) => {
+                    e.preventDefault();
+                    feedEditContentArea.style.display = 'none';
+                    feedContentText.style.display = 'block';
+                })
+                feedEditForm.appendChild(feedEditTextArea);
+                feedEditContentArea.appendChild(feedEditForm);
+                // set edit area to hidden
+                feedEditContentArea.style.display = 'none';
+                feedItemContent.appendChild(feedEditContentArea);
+                feedEditAction.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    feedContentText.style.display = 'none';
+                    feedEditContentArea.style.display = 'block';
+                })
+            }
             // create children div - image
             let feedItemImage = document.createElement('div');
             feedItemImage.classList.add('feed-item-image');
@@ -260,14 +312,16 @@ homeFeedsList.addEventListener('click', (e) => {
     // if target is the form, then add event press enter to submit a comment
     if (e.target.parentNode.tagName == "FORM") {
         console.log('form selected');
-        let commentForm = e.target.parentNode;
-        let targetId = Number(e.target.id.split("-")[1]);
+        let targetForm = e.target.parentNode;
+        console.log(targetForm.id);
+        let targetId = Number(targetForm.id.split("-").pop());
         console.log(targetId);
         // do actions based on the form (add-comment or edit-comment)
-        if (commentForm.id === `add-comment-${targetId}`) {
+        // create new comment for target feed id 
+        if (targetForm.id === `add-comment-${targetId}`) {
             let feedId = targetId;
             console.log(`target feed id: ${feedId}`);
-            commentForm.addEventListener("keyup", (e) => {
+            targetForm.addEventListener("keyup", (e) => {
                 if (e.key === "Enter") {
                     e.stopPropagation();
                     let commentText = e.target.value.trim();
@@ -285,10 +339,11 @@ homeFeedsList.addEventListener('click', (e) => {
                     }
                 }
             })
-        } else if (commentForm.id === `edit-comment-${targetId}`) {
+        } // edit target comment 
+        else if (targetForm.id === `edit-comment-${targetId}`) {
             let commentId = targetId;
             console.log(`edit comment ${commentId}`);
-            commentForm.addEventListener("keyup", (e) => {
+            targetForm.addEventListener("keyup", (e) => {
                 if (e.key === "Enter") {
                     e.stopPropagation();
                     console.log('Entered');
@@ -306,6 +361,32 @@ homeFeedsList.addEventListener('click', (e) => {
                             // update comments in local storage
                             localStorage.setItem('comments', JSON.stringify(comments));
                             renderCommentsList(targetComment.feedId);
+                        }
+                    }
+                }
+            })
+        } // edit target feed id 
+        else if (targetForm.id === `edit-feed-${targetId}`) {
+            console.log(`edit feed comment ${targetId}`);
+            targetForm.addEventListener("keyup", (e) => {
+                if (e.key === "Enter") {
+                    e.stopPropagation();
+                    console.log('Entered');
+                    let newFeedContent = e.target.value.trim();
+                    if (newFeedContent !== '') {
+                        let postIndex = allPosts.findIndex(post => post.id == targetId);
+                        if (postIndex !== -1) {
+                            // update the content of the post with new content
+                            let targetFeed = allPosts[postIndex];
+                            targetFeed.content = newFeedContent;
+                            targetFeed.updatedAt = new Date();
+                            // update feed in local storage
+                            localStorage.setItem('allPosts', JSON.stringify(allPosts));
+                            // display the feed-item-caption  div
+                            let feedContent = targetForm.parentNode.parentNode.childNodes[0];
+                            feedContent.innerText = newFeedContent;
+                            feedContent.style.display = 'block';
+                            targetForm.parentNode.style.display = 'none';
                         }
                     }
                 }
@@ -338,6 +419,34 @@ homeFeedsList.addEventListener('click', (e) => {
                     localStorage.setItem('comments', JSON.stringify(comments));
                     // re-render comments list of the feed
                     renderCommentsList(feedId);
+                }
+            }
+        })
+    }
+    if (e.target.parentNode.classList.contains('delete-feed')) {
+        console.log('delete feed action');
+        let target = e.target.parentNode.id;
+        let feedId = target.split("-")[1];
+        console.log(feedId);
+        Swal.fire({
+            title: 'フィードを削除します',
+            text: '削除したフィードは取り戻せませんが、削除してもよろしいでしょうか。',
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonColor: '#dedde1',
+            confirmButtonColor: '#dc3545',
+            confirmButtonText: 'フィードを削除',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                console.log('delete action confirmed');
+                let feedIndex = allPosts.findIndex(post => post.id == feedId);
+                if (feedIndex !== -1) {
+                    // delete target feed
+                    allPosts.splice(feedIndex, 1);
+                    // update local storage
+                    localStorage.setItem('allPosts', JSON.stringify(allPosts));
+                    // render the home feeds list
+                    renderHomeFeedsList();
                 }
             }
         })

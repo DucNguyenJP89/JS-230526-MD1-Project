@@ -447,9 +447,25 @@ body {
 }
 
 .feed-item-header {
-    padding: 16px 0;
+    padding: 16px 10px 0 0;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+}
+
+.feed-user-info {
+    display: flex;
+}
+
+.feed-user-actions a i {
+    padding: 0 10px;
+    color: rgb(96, 103, 112, 0.3);
+    text-decoration: none;
+}
+
+.feed-user-actions a:hover i {
+    cursor: pointer;
+    color: #606770;
 }
 
 .home-feed-img {
@@ -471,8 +487,13 @@ body {
 }
 
 .feed-item-caption {
-    margin: 0 0 10px 10px;
+    width: 100%;
+    padding: 10px;
 }
+
+/* .feed-item-caption .add-post-content {
+
+} */
 
 .feed-item-image {
     width: 100%;
