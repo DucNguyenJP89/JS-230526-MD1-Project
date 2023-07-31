@@ -1,6 +1,16 @@
 // get information from localStorage
 let users = JSON.parse(localStorage.getItem('users')) || [];
 
+if (users.length > 0) {
+    users.sort((a, b) => {
+        let prevDate = new Date(a.joinedAt);
+        let nextDate = new Date(b.joinedAt);
+        return nextDate - prevDate;
+    });
+}
+
+console.log(users);
+
 // render user information to the list
 let usersTable = document.querySelector('.projects');
 

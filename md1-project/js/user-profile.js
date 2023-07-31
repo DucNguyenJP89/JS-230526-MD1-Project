@@ -463,7 +463,7 @@ homeFeedsList.addEventListener('click', (e) => {
                         let newComment = new FeedComment(commentId, feedId, userId, commentText, createdAt, updatedAt);
                         comments.push(newComment);
                         localStorage.setItem('comments', JSON.stringify(comments));
-                        commentForm.reset();
+                        targetForm.reset();
                         renderCommentsList(feedId);
                     }
                 }
