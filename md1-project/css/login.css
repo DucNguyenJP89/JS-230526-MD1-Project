@@ -99,6 +99,11 @@ body {
     line-height: 48px;
 }
 
+.login-form .login-btn:hover {
+    cursor: pointer;
+    background-color: #1566d0;
+}
+
 .login-form .forget-password {
     margin: 12px auto;
 }
