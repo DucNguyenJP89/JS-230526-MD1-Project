@@ -596,7 +596,7 @@ homeFeedsList.addEventListener('click', (e) => {
         })
         console.log(userLikeIndex);
         // if -1 then add like to the feed
-        if (userLikeIndex !== -1) {
+        if (userLikeIndex != -1) {
             // update state of like button
             e.target.parentNode.classList.remove('clicked');
             // remove like
