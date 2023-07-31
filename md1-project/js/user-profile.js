@@ -16,22 +16,27 @@ let activeUsers = users.filter((user) => {
 let queryString = window.location.search;
 let urlParams = new URLSearchParams(queryString);
 let userProfileId = Number(urlParams.get('userId'));
+let currentUser = users.find(user => user.id == userProfileId);
 console.log(userProfileId);
+
+// check if currentUser is login user
+let isLoginUser = loginUser.id == userProfileId;
+console.log(isLoginUser);
 
 // prepare value to use for rendering
 let fbLeftUserLink = document.getElementById('fb-left-user-link');
+let homeFeedCreatePost = document.querySelector('.home-feed-create-post');
 let createPostInputArea = document.getElementById('create-post-input');
 let displayName = loginUser.firstName + ' ' + loginUser.lastName;
+let currentUserName = currentUser.firstName + ' ' + currentUser.lastName;
 let navProfileAvatar = document.getElementById('nav-profile-avatar');
 
 // get posts and comments to display
 let allPosts = JSON.parse(localStorage.getItem('allPosts')) || [];
 let comments = JSON.parse(localStorage.getItem('comments')) || [];
-
 let userPosts = allPosts.filter((post) => {
     return post.userId == userProfileId;
 })
-console.log(allPosts);
 
 // render profile picture on navbar
 function renderNavBarAvatar() {
@@ -46,11 +51,15 @@ function renderUserLeftNav() {
     fbLeftUserLink.innerHTML = `
     <div class="fb-left-nav-icon"><img src="https://picsum.photos/100" alt="fb-left-nav-avatar"></div>
     `
+    fbLeftUserLink.addEventListener('click', () => {
+        window.location.href = `./user-profile.html?userId=${loginUser.id}`;
+    })
 }
 
 // render user info on create post section
 function renderUserCreatePost() {
-    createPostInputArea.innerHTML = `
+    if (isLoginUser) {
+        createPostInputArea.innerHTML = `
         <div class="create-post-avatar">
             <img src="https://picsum.photos/100" alt="avatar">
         </div>
@@ -60,13 +69,54 @@ function renderUserCreatePost() {
                 <button type="submit" class="create-post-btn disabled" id="create-post-btn" disabled>投稿</button>
             </form>
         </div>
-     `
+        `
+    } else {
+        homeFeedCreatePost.style.display = 'none';
+    }
+   
+}
+
+// render top page
+let topContainer = document.querySelector('.top-container');
+function renderTopPage() {
+    topContainer.innerHTML = '';
+    let topContainerCoverImg = document.createElement('div');
+    topContainerCoverImg.classList.add('cover-container');
+    topContainerCoverImg.innerHTML = `
+        <img src="https://picsum.photos/seed/picsum/1300/400" alt="cover-photo">
+    `;
+    let topProfileInfo = document.createElement('div');
+    topProfileInfo.classList.add('top-profile-info');
+    topProfileInfo.innerHTML = `
+        <div class="user-info-container">
+            <div class="user-avatar">
+                <img src="https://picsum.photos/300" alt="user-avatar">
+            </div>
+            <div class="user-infos">
+                <div class="user-name">
+                    ${currentUserName}
+                </div>
+            </div>
+        </div>
+    `;
+    let userInfoLinks = document.createElement('div');
+    userInfoLinks.classList.add('user-info-links');
+    userInfoLinks.innerHTML = `
+        <ul class="links-group">
+            <li class="link-active"><a href="">投稿</a></li>
+            <li><a href="">友達</a></li>
+        </ul>
+    `;
+    // add all elements into top container
+    topContainer.appendChild(topContainerCoverImg);
+    topContainer.appendChild(topProfileInfo);
+    topContainer.appendChild(userInfoLinks);
 }
 
 let homeFeedsList = document.getElementById('home-feeds-list');
 function renderHomeFeedsList() {
     if (userPosts.length > 0) {
-        allPosts.sort((a, b) => {
+        userPosts.sort((a, b) => {
             let prevDate = new Date(a.createdAt);
             let nextDate = new Date(b.createdAt);
             return nextDate - prevDate;
@@ -75,11 +125,11 @@ function renderHomeFeedsList() {
     homeFeedsList.innerHTML = '';
     userPosts.forEach((post) => {
         let feedId = post.id;
-        let userId = post.userId;
+        let feedStatus = post.status;
         // get user name from userId
-        let user = users.find((user) => user.id === userId);
-        if (user.status == 1) {
-            let userName = user.firstName + " " + user.lastName;
+        let check = currentUser.status == 1 && feedStatus == 1;
+        if (check) {
+            let userName = currentUser.firstName + " " + currentUser.lastName;
             let content = post.content;
             let updatedAt = new Date(post.updatedAt);
             let date = updatedAt.toDateString();
@@ -91,7 +141,10 @@ function renderHomeFeedsList() {
             // create children div inside home feed item - item header
             let feedItemHeader = document.createElement('div');
             feedItemHeader.classList.add('feed-item-header');
-            feedItemHeader.innerHTML = `
+            // create div to display user info
+            let feedUserInfo = document.createElement('div');
+            feedUserInfo.classList.add('feed-user-info');
+            feedUserInfo.innerHTML = `
             <div class="feed-item-avatar">
                 <img class="home-feed-img" src="https://picsum.photos/100" alt="feed-avatar">
             </div>
@@ -99,17 +152,66 @@ function renderHomeFeedsList() {
                 <div>${userName}</div>
                 <span>${date}</span>
             </div>
-        `;
+            `;
+            feedUserInfo.addEventListener('click', (e) => {
+                window.location.href = `./user-profile.html?userId=${post.userId}`;
+            })
+            feedItemHeader.appendChild(feedUserInfo);
             // create children div - item content
             let feedItemContent = document.createElement('div');
             feedItemContent.classList.add('feed-item-caption');
-            feedItemContent.innerText = content;
+            let feedContentText = document.createElement('div');
+            feedContentText.innerText = content;
+            feedItemContent.appendChild(feedContentText);
+            // create a form to edit post content if it is login user post
+            if (isLoginUser) {
+                let feedUserActions = document.createElement('div');
+                feedUserActions.classList.add('feed-user-actions');
+                // create button to edit and delete
+                let feedEditAction = document.createElement('a');
+                feedEditAction.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
+                feedEditAction.addEventListener('click', (e) => {
+
+                })
+                let feedDeleteAction = document.createElement('a');
+                feedDeleteAction.classList.add('delete-feed');
+                feedDeleteAction.setAttribute('id', `delete-${feedId}`);
+                feedDeleteAction.innerHTML = `<i class="fa-regular fa-trash-can"></i>`;
+                // add actions to the div
+                feedUserActions.appendChild(feedEditAction);
+                feedUserActions.appendChild(feedDeleteAction);
+                // add actions to feed header
+                feedItemHeader.appendChild(feedUserActions);
+                let feedEditContentArea = document.createElement('div');
+                feedEditContentArea.classList.add('add-post-content');
+                let feedEditForm = document.createElement('form');
+                feedEditForm.classList.add("edit-feed-form");
+                feedEditForm.setAttribute('id', `edit-feed-${feedId}`);
+                let feedEditTextArea = document.createElement('textarea');
+                feedEditTextArea.setAttribute('id', `edit-feedId-${feedId}`);
+                feedEditTextArea.value = content;
+                feedEditTextArea.addEventListener('focusout', (e) => {
+                    e.preventDefault();
+                    feedEditContentArea.style.display = 'none';
+                    feedContentText.style.display = 'block';
+                })
+                feedEditForm.appendChild(feedEditTextArea);
+                feedEditContentArea.appendChild(feedEditForm);
+                // set edit area to hidden
+                feedEditContentArea.style.display = 'none';
+                feedItemContent.appendChild(feedEditContentArea);
+                feedEditAction.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    feedContentText.style.display = 'none';
+                    feedEditContentArea.style.display = 'block';
+                })
+            }
             // create children div - image
             let feedItemImage = document.createElement('div');
             feedItemImage.classList.add('feed-item-image');
             feedItemImage.innerHTML = `
             <img class="img-first" src="https://picsum.photos/800" alt="image">
-        `;
+            `;
             // create children div - likes and comments count
             let feedItemReactions = document.createElement('div');
             feedItemReactions.classList.add('feed-item-reactions');
@@ -121,7 +223,7 @@ function renderHomeFeedsList() {
             <div class="feed-item-comments">
                 コメント10件 (TO DO)
             </div>
-        `;
+            `;
             // create children div - actions
             let feedItemActions = document.createElement('div');
             feedItemActions.classList.add('feed-item-actions');
@@ -134,7 +236,7 @@ function renderHomeFeedsList() {
                 <a href="#feedId-${feedId}"><i class="fa-regular fa-message"></i>
                 <span>コメント</span></a>
             </div>
-        `;
+            `;
             // create children div - comments list
             let feedItemCommentsList = document.createElement('div');
             feedItemCommentsList.classList.add('feed-item-comments-list');
@@ -152,7 +254,7 @@ function renderHomeFeedsList() {
             <div class="add-post-content">
                 <form id="add-comment-${feedId}"><textarea name="add-post-content" id="feedId-${feedId}" placeholder="コメントを入力"></textarea></form>
             </div>
-        `;
+            `;
             // add comment input section into comments list
             feedItemCommentsList.appendChild(commentsListArea);
             feedItemCommentsList.appendChild(addPostComment);
@@ -171,5 +273,306 @@ function renderHomeFeedsList() {
 
 renderNavBarAvatar();
 renderUserLeftNav();
+renderTopPage();
 renderUserCreatePost();
 renderHomeFeedsList();
+// render comments list of each post
+userPosts.forEach((post) => {
+    let feedId = post.id;
+    let feedStatus = post.status;
+    // check if post is valid 
+    let check = currentUser.status == 1 && feedStatus == 1;
+    if (check) {
+        renderCommentsList(feedId);
+    }
+})
+
+// handle display logout container
+navProfileAvatar.addEventListener('click', () => {
+    let logoutContainer = document.querySelector('.user-logout');
+    if (logoutContainer.style.display === 'none') {
+        logoutContainer.style.display = 'block';
+    } else {
+        logoutContainer.style.display = 'none';
+    }
+})
+
+// handle user logout 
+let logoutAction = document.getElementById('logout');
+logoutAction.addEventListener('click', () => {
+    localStorage.removeItem('loginUser');
+    window.location.href = '../html/home.html';
+})
+
+// create and add new post to the list
+let createPostTextarea = document.getElementById('create-new-post');
+let createPostBtn = document.getElementById('create-post-btn');
+let createPostForm = document.getElementById('new-post-form');
+
+// control behavior of textarea and button 
+if (isLoginUser) {
+    createPostTextarea.addEventListener('keyup', (e) => {
+        e.preventDefault();
+        if (createPostTextarea.value !== '') {
+            createPostBtn.disabled = false;
+            createPostBtn.classList.remove('disabled');
+        } else {
+            createPostBtn.disabled = true;
+            createPostBtn.classList.add('disabled');
+        }
+    })
+
+    // create new post and push to allPosts
+    createPostForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        // initiate value of new post
+        let id = Math.floor(Math.random() * 10000000);
+        let userId = loginUser.id;
+        let createdAt = new Date();
+        let updatedAt = new Date();
+        let content = createPostTextarea.value;
+        // create new post
+        let newPost = new UserFeed(id, userId, createdAt, updatedAt, content);
+        allPosts.push(newPost);
+        userPosts.push(newPost);
+        console.log(allPosts);
+        localStorage.setItem('allPosts', JSON.stringify(allPosts));
+        renderHomeFeedsList();
+        createPostForm.reset();
+    })
+}
+
+function renderCommentsList(feedId) {
+    // get the comments list area by feed id
+    let commentsListArea = document.getElementById(`list-${feedId}`);
+    // clear content of the list
+    commentsListArea.innerHTML = '';
+    // get comments by feedId
+    let feedComments = comments.filter((comment) => {
+        return comment.feedId === feedId;
+    })
+    console.log(feedComments);
+    // create layout for each comment
+    feedComments.forEach((comment) => {
+        // get the user information
+        let user = users.find((user) => user.id === comment.userId);
+        let userName = user.firstName + " " + user.lastName;
+        if (user.status != 1) {
+            userName += " (blocked)";
+        }
+        let commentItem = document.createElement('div');
+        commentItem.classList.add('comment-item');
+        // create children div for comment-item
+        let commentItemAvatar = document.createElement('div');
+        commentItemAvatar.classList.add('comment-item-avar');
+        commentItemAvatar.innerHTML = `
+            <img class="home-feed-img" src="https://picsum.photos/100" alt="comment-avatar">
+        `;
+        let commentItemContent = document.createElement('div');
+        commentItemContent.classList.add('comment-item-content');
+        commentItemContent.setAttribute('id', comment.commentId);
+        // create children div to display comment content
+        let commentItemWrap = document.createElement('div');
+        commentItemWrap.classList.add('wrap');
+        commentItemWrap.innerHTML = `
+            <div class="comment-username">${userName}</div>
+            <div>${comment.commentText}</div> 
+        `;
+        //add the chilren divs to comment item content
+        commentItemContent.appendChild(commentItemWrap);
+        // if comment user is login user, render the form and allow edit, set it as hidden
+        if (comment.userId === loginUser.id) {
+            // create edit section and set it hidden
+            let commentFormArea = document.createElement('div');
+            commentFormArea.classList.add('add-post-content');
+            let commentForm = document.createElement('form');
+            commentForm.setAttribute('id', `edit-comment-${comment.commentId}`);
+            let textArea = document.createElement('textarea');
+            textArea.setAttribute('id', `commentId-${comment.commentId}`);
+            textArea.value = comment.commentText;
+            // add elements into commentFormArea
+            commentForm.appendChild(textArea);
+            commentFormArea.appendChild(commentForm);
+            // set the form hidden
+            commentFormArea.style.display = 'none';
+            // when focus out of the form, hide it
+            textArea.addEventListener('focusout', (e) => {
+                e.stopPropagation();
+                commentItemContent.classList.remove('edit');
+                commentItemWrap.style.display = 'block';
+                commentItemEdit.style.display = 'inline-block';
+                commentItemDelete.style.display = 'inline-block';
+                commentFormArea.style.display = 'none';
+            })
+            let commentItemEdit = document.createElement('a');
+            commentItemEdit.innerText = '編集';
+            commentItemEdit.addEventListener('click', (e) => {
+                e.preventDefault();
+                // adjust comment item content div
+                commentItemContent.classList.add('edit');
+                commentItemWrap.style.display = 'none';
+                commentFormArea.style.display = 'block';
+                commentItemEdit.style.display = 'none';
+                commentItemDelete.style.display = 'none';
+            })
+            let commentItemDelete = document.createElement('a');
+            commentItemDelete.innerText = '削除';
+            commentItemDelete.classList.add('delete-comment');
+            commentItemDelete.setAttribute('id', `delete-${comment.commentId}`);
+            commentItemContent.appendChild(commentFormArea);
+            commentItemContent.appendChild(commentItemEdit);
+            commentItemContent.appendChild(commentItemDelete);
+        }
+        // add comment item content to the comment item
+        commentItem.appendChild(commentItemAvatar);
+        commentItem.appendChild(commentItemContent);
+        commentsListArea.appendChild(commentItem);
+    })
+}
+
+// add event listener to home feeds
+homeFeedsList.addEventListener('click', (e) => {
+    console.log(e.target);
+    // if target is the form, then add event press enter to submit a comment
+    if (e.target.parentNode.tagName == "FORM") {
+        console.log('form selected');
+        let targetForm = e.target.parentNode;
+        console.log(targetForm.id);
+        let targetId = Number(targetForm.id.split("-").pop());
+        console.log(targetId);
+        // do actions based on the form (add-comment or edit-comment)
+        // create new comment for target feed id 
+        if (targetForm.id === `add-comment-${targetId}`) {
+            let feedId = targetId;
+            console.log(`target feed id: ${feedId}`);
+            targetForm.addEventListener("keyup", (e) => {
+                if (e.key === "Enter") {
+                    e.stopPropagation();
+                    let commentText = e.target.value.trim();
+                    if (commentText !== '') {
+                        let commentId = Math.floor(Math.random() * 10000000);
+                        let userId = loginUser.id;
+                        let createdAt = new Date();
+                        let updatedAt = new Date();
+                        // create new comment object and push to the comments list
+                        let newComment = new FeedComment(commentId, feedId, userId, commentText, createdAt, updatedAt);
+                        comments.push(newComment);
+                        localStorage.setItem('comments', JSON.stringify(comments));
+                        commentForm.reset();
+                        renderCommentsList(feedId);
+                    }
+                }
+            })
+        } // edit target comment 
+        else if (targetForm.id === `edit-comment-${targetId}`) {
+            let commentId = targetId;
+            console.log(`edit comment ${commentId}`);
+            targetForm.addEventListener("keyup", (e) => {
+                if (e.key === "Enter") {
+                    e.stopPropagation();
+                    console.log('Entered');
+                    let commentText = e.target.value.trim();
+                    if (commentText !== '') {
+                        // find the index of target comment
+                        let commentIndex = comments.findIndex((comment) => comment.commentId === commentId)
+                        // update the content of comment if found
+                        if (commentIndex !== -1) {
+                            let targetComment = comments[commentIndex];
+                            console.log(targetComment);
+                            // update updatedAt and content
+                            targetComment.commentText = commentText;
+                            targetComment.updatedAt = new Date();
+                            // update comments in local storage
+                            localStorage.setItem('comments', JSON.stringify(comments));
+                            renderCommentsList(targetComment.feedId);
+                        }
+                    }
+                }
+            })
+        } // edit target feed id 
+        else if (targetForm.id === `edit-feed-${targetId}`) {
+            console.log(`edit feed comment ${targetId}`);
+            targetForm.addEventListener("keyup", (e) => {
+                if (e.key === "Enter") {
+                    e.stopPropagation();
+                    console.log('Entered');
+                    let newFeedContent = e.target.value.trim();
+                    if (newFeedContent !== '') {
+                        let postIndex = allPosts.findIndex(post => post.id == targetId);
+                        if (postIndex !== -1) {
+                            // update the content of the post with new content
+                            let targetFeed = allPosts[postIndex];
+                            targetFeed.content = newFeedContent;
+                            targetFeed.updatedAt = new Date();
+                            // update feed in local storage
+                            localStorage.setItem('allPosts', JSON.stringify(allPosts));
+                            // display the feed-item-caption  div
+                            let feedContent = targetForm.parentNode.parentNode.childNodes[0];
+                            feedContent.innerText = newFeedContent;
+                            feedContent.style.display = 'block';
+                            targetForm.parentNode.style.display = 'none';
+                        }
+                    }
+                }
+            })
+        }
+    }
+    if (e.target.classList.contains('delete-comment')) {
+        let target = e.target.id;
+        let commentId = target.split("-")[1];
+        console.log(commentId);
+        Swal.fire({
+            text: 'コメントを削除してよろしいでしょうか。',
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonColor: '#dedde1',
+            confirmButtonColor: '#dc3545',
+            confirmButtonText: '削除',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                console.log('confirmed');
+                let commentIndex = comments.findIndex(comment => comment.commentId == commentId);
+                console.log(commentIndex);
+                if (commentIndex != -1) {
+                    let feedId = Number(comments[commentIndex].feedId);
+                    console.log(feedId);
+                    // delete comment in comments list
+                    comments.splice(commentIndex, 1);
+                    console.log(comments);
+                    // update local storage
+                    localStorage.setItem('comments', JSON.stringify(comments));
+                    // re-render comments list of the feed
+                    renderCommentsList(feedId);
+                }
+            }
+        })
+    }
+    if (e.target.parentNode.classList.contains('delete-feed')) {
+        console.log('delete feed action');
+        let target = e.target.parentNode.id;
+        let feedId = target.split("-")[1];
+        console.log(feedId);
+        Swal.fire({
+            title: 'フィードを削除します',
+            text: '削除したフィードは取り戻せませんが、削除してもよろしいでしょうか。',
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonColor: '#dedde1',
+            confirmButtonColor: '#dc3545',
+            confirmButtonText: 'フィードを削除',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                console.log('delete action confirmed');
+                let feedIndex = allPosts.findIndex(post => post.id == feedId);
+                if (feedIndex !== -1) {
+                    // delete target feed
+                    allPosts.splice(feedIndex, 1);
+                    // update local storage
+                    localStorage.setItem('allPosts', JSON.stringify(allPosts));
+                    // render the home feeds list
+                    renderHomeFeedsList();
+                }
+            }
+        })
+    }
+});

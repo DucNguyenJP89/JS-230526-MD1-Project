@@ -21,6 +21,11 @@
         <div class="profile-avatar" id="nav-profile-avatar">
         </div>
     </nav>
+    <div class="user-logout">
+        <div class="logout-container" id="logout">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i> ログアウト
+        </div>
+    </div>
     <div class="left-panel">
         <div class="fb-left-nav-link">
             <div class="fb-left-nav-item">
@@ -38,7 +43,7 @@
         <div class="main-profile">
             <div class="top-container">
                 <div class="cover-container">
-                    <img src="https://picsum.photos/seed/picsum/1100/400" alt="cover-photo">
+                    <img src="https://picsum.photos/seed/picsum/1300/400" alt="cover-photo">
                 </div>
                 <div class="top-profile-info">
                     <div class="user-info-container">
@@ -76,7 +81,21 @@
                 </div>
             </div>
             <div class="user-feeds-container">
-                <div class="user-details-container"></div>
+                <div class="user-details-container">
+                    <div class="user-basic-info">
+                        <h2>自己紹介</h2>
+                        <p>ユーザーの基本情報はここに表示される。</p>
+                    </div>
+                    <div class="user-footer-links">
+                        <ul class="footer-link">
+                            <li class="footer-link-item"><a href="#">プライバシー</a><span>・</span></li>
+                            <li class="footer-link-item"><a href="#">利用規約</a><span>・</span></li>
+                            <li class="footer-link-item"><a href="#">広告</a><span>・</span></li>
+                            <li class="footer-link-item"><a href="#">その他</a><span>・</span></li>
+                            <li class="footer-link-item">MetaxDucNguyen &copy; 2023</li>
+                        </ul>
+                    </div>
+                </div>
                 <div class="fb-home-content">
                     <div class="home-feed-create-post">
                         <div class="create-post-input-area" id="create-post-input">
@@ -177,6 +196,7 @@
             </div>
         </div>
     </div>
-    <script type="module" src="../js/user-profile.js"></script>    
+    <script type="module" src="../js/user-profile.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>    
 </body>
 </html>

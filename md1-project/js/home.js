@@ -59,7 +59,7 @@ function renderFriendsList() {
             friendItem.classList.add('friend-item');
             friendItem.innerHTML = `
                 <div class="friend-avatar">
-                    <img class="home-feed-img" src="https://picsum.photos/50" alt="friend-avatar">
+                    <a href="./user-profile.html?userId=${user.id}" target="_blank"><img class="home-feed-img" src="https://picsum.photos/50" alt="friend-avatar"></a>
                 </div>
                 <span class="friend-name">${displayName}</span>
             `;
@@ -119,6 +119,9 @@ function renderHomeFeedsList() {
                 <span>${date}</span>
             </div>
             `;
+            feedUserInfo.addEventListener('click', (e) => {
+                window.location.href = `./user-profile.html?userId=${post.userId}`;
+            })
             feedItemHeader.appendChild(feedUserInfo);
             // create children div - item content
             let feedItemContent = document.createElement('div');
@@ -271,7 +274,7 @@ logoutAction.addEventListener('click', () => {
 })
 
 
-// // create and add new post to the list
+// create and add new post to the list
 let createPostTextarea = document.getElementById('create-new-post');
 let createPostBtn = document.getElementById('create-post-btn');
 let createPostForm = document.getElementById('new-post-form');

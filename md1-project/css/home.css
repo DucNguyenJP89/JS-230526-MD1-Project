@@ -310,7 +310,8 @@ body {
 
 /* css for the home panel  */
 .fb-home-panel {
-    width: 720px;
+    max-width: 720px;
+    width: 100%;
     overflow-y: auto;
 }
 
@@ -475,6 +476,10 @@ body {
     border-radius: 50%;
 }
 
+.home-feed-img:hover {
+    cursor: pointer;
+}
+
 .feed-item-username div {
     font-size: 16px;
     margin-bottom: 0;
@@ -592,7 +597,7 @@ body {
 
 .comment-item-content .wrap {
     /* margin-bottom: 4px; */
-    padding: 10px;
+    padding: 12px;
     background-color: rgb(193, 198, 204, 0.3);
     border-radius: 12px;
     font-size: 14px;
