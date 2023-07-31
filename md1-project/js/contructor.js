@@ -34,3 +34,11 @@ export class FeedComment {
         this.status = 1; // 1: valid - 9: invalid
     }
 }
+
+export class FeedLike {
+    constructor(likeId, feedId, userId) {
+        this.likeId = likeId;
+        this.feedId = feedId;
+        this.userId = userId;
+    }
+}

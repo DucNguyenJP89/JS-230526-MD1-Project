@@ -1,4 +1,4 @@
-import { UserFeed, FeedComment } from "../js/contructor.js";
+import { UserFeed, FeedComment, FeedLike } from "../js/contructor.js";
 
 //get login user
 let loginUser = JSON.parse(localStorage.getItem('loginUser')) || null;
@@ -37,6 +37,7 @@ let comments = JSON.parse(localStorage.getItem('comments')) || [];
 let userPosts = allPosts.filter((post) => {
     return post.userId == userProfileId;
 })
+let likes = JSON.parse(localStorage.getItem('likes')) || [];
 
 // render profile picture on navbar
 function renderNavBarAvatar() {
@@ -170,9 +171,6 @@ function renderHomeFeedsList() {
                 // create button to edit and delete
                 let feedEditAction = document.createElement('a');
                 feedEditAction.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
-                feedEditAction.addEventListener('click', (e) => {
-
-                })
                 let feedDeleteAction = document.createElement('a');
                 feedDeleteAction.classList.add('delete-feed');
                 feedDeleteAction.setAttribute('id', `delete-${feedId}`);
@@ -216,11 +214,11 @@ function renderHomeFeedsList() {
             let feedItemReactions = document.createElement('div');
             feedItemReactions.classList.add('feed-item-reactions');
             feedItemReactions.innerHTML = `
-            <div class="feed-item-likes">
+            <div class="feed-item-likes" id="like-count-${feedId}">
                 <i class="fa-solid fa-thumbs-up"></i>
                 <span>5 (TO DO)</span>
             </div>
-            <div class="feed-item-comments">
+            <div class="feed-item-comments" id="comment-count-${feedId}">
                 コメント10件 (TO DO)
             </div>
             `;
@@ -228,7 +226,7 @@ function renderHomeFeedsList() {
             let feedItemActions = document.createElement('div');
             feedItemActions.classList.add('feed-item-actions');
             feedItemActions.innerHTML = `
-            <div class="feed-item-action-like" id="like-${feedId}">
+            <div class="feed-item-action-like" id="add-like-${feedId}">
                 <i class="fa-regular fa-thumbs-up"></i>
                 <span>いいね！</span>
             </div>
@@ -284,6 +282,7 @@ userPosts.forEach((post) => {
     let check = currentUser.status == 1 && feedStatus == 1;
     if (check) {
         renderCommentsList(feedId);
+        renderLikeCount(feedId);
     }
 })
 
@@ -352,6 +351,12 @@ function renderCommentsList(feedId) {
         return comment.feedId === feedId;
     })
     console.log(feedComments);
+    let commentCount = feedComments.length;
+    // add count to the feed
+    let feedCommentCount = document.getElementById(`comment-count-${feedId}`);
+    feedCommentCount.innerHTML = `
+        コメント${commentCount}件
+    `;
     // create layout for each comment
     feedComments.forEach((comment) => {
         // get the user information
@@ -446,7 +451,7 @@ homeFeedsList.addEventListener('click', (e) => {
             let feedId = targetId;
             console.log(`target feed id: ${feedId}`);
             targetForm.addEventListener("keyup", (e) => {
-                if (e.key === "Enter") {
+                if (e.key === "Enter" && e.shiftKey) {
                     e.stopPropagation();
                     let commentText = e.target.value.trim();
                     if (commentText !== '') {
@@ -468,7 +473,7 @@ homeFeedsList.addEventListener('click', (e) => {
             let commentId = targetId;
             console.log(`edit comment ${commentId}`);
             targetForm.addEventListener("keyup", (e) => {
-                if (e.key === "Enter") {
+                if (e.key === "Enter" && e.shiftKey) {
                     e.stopPropagation();
                     console.log('Entered');
                     let commentText = e.target.value.trim();
@@ -493,7 +498,7 @@ homeFeedsList.addEventListener('click', (e) => {
         else if (targetForm.id === `edit-feed-${targetId}`) {
             console.log(`edit feed comment ${targetId}`);
             targetForm.addEventListener("keyup", (e) => {
-                if (e.key === "Enter") {
+                if (e.key === "Enter" && e.shiftKey) {
                     e.stopPropagation();
                     console.log('Entered');
                     let newFeedContent = e.target.value.trim();
@@ -575,4 +580,58 @@ homeFeedsList.addEventListener('click', (e) => {
             }
         })
     }
+    if (e.target.parentNode.classList.contains('feed-item-action-like')) {
+        console.log('Clicked like action');
+        let targetId = e.target.parentNode.id;
+        console.log(targetId);
+        let feedId = Number(targetId.split("-").pop());
+        console.log(feedId);
+        // check if login user like the feed or not
+        let feedLikes = likes.filter((like) => { return like.feedId == feedId });
+        console.log(feedLikes);
+        let userLikeIndex = feedLikes.findIndex((like) => {
+            console.log(like.userId);
+            console.log(loginUser.id);
+            return like.userId == loginUser.id;
+        })
+        console.log(userLikeIndex);
+        // if -1 then add like to the feed
+        if (userLikeIndex !== -1) {
+            // update state of like button
+            e.target.parentNode.classList.remove('clicked');
+            // remove like
+            likes.splice(userLikeIndex, 1);
+            // update local storage
+            localStorage.setItem('likes', JSON.stringify(likes));
+            renderLikeCount(feedId);
+        } else {
+            let likeId = Math.floor(Math.random() * 10000000);
+            let userLike = new FeedLike(likeId, feedId, loginUser.id);
+            // add user like to likes list
+            likes.push(userLike);
+            // update state of like button
+            e.target.parentNode.classList.add('clicked');
+            // update local storage
+            localStorage.setItem('likes', JSON.stringify(likes));
+            renderLikeCount(feedId);
+        }
+    }
 });
+
+function renderLikeCount(feedId) {
+    let feedLikes = likes.filter((like) => {
+        return like.feedId == feedId;
+    })
+    let likesCount = feedLikes.length;
+    let feedItemLikes = document.getElementById(`like-count-${feedId}`);
+    feedItemLikes.innerHTML = `
+        <i class="fa-solid fa-thumbs-up"></i>
+        <span>${likesCount}</span>
+    `;
+    // check if login user liked the post
+    let feedActionLike = document.getElementById(`add-like-${feedId}`);
+    let userLikeIndex = feedLikes.findIndex(like => like.userId == loginUser.id);
+    if (userLikeIndex != -1) {
+        feedActionLike.classList.add('clicked');
+    }
+}

@@ -76,16 +76,16 @@ regInputGrp.addEventListener('focusout', event => {
         event.target.classList.add('error');
         switch (event.target.id) {
             case 'register-first':
-                regFirstError.innerText = 'First name cannot be empty';
+                regFirstError.innerText = '姓は必須項目です';
                 break;
             case 'register-last':
-                regLastError.innerText = 'Last name cannot be empty';
+                regLastError.innerText = '名は必須項目です';
                 break;
             case 'register-email':
-                regEmailError.innerText = 'Email cannot be empty';
+                regEmailError.innerText = 'メールアドレスは必須項目です';
                 break;
             case 'register-password':
-                regPwError.innerText = 'Password cannot be empty';
+                regPwError.innerText = 'パスワードは必須項目です';
                 break;
         }
     }
@@ -130,13 +130,13 @@ function validateRegEmail(email) {
         if (patternCheck) {
             let isEmailExist = checkEmailExist(email);
             if (isEmailExist) {
-                error = 'Email already existed.';
+                error = 'メールアドレスは既に存在しました';
             } else {
                 console.log('valid email');
                 isValid = true;
             }
         } else {
-            error = 'Invalid email address format';
+            error = 'メールアドレスの形式は正しくありません';
         }
     }
     if (!isValid) {
@@ -164,9 +164,9 @@ function validateRegPassword(password) {
         } else {
             error = `
                 <ul>
-                    <li> The password should be at least 8 characters long</li>
-                    <li> The password should contain at least one uppercase, one lowercase, and one number</li>
-                    <li> The password should not contain any common words or easily guessed patterns</li>
+                    <li>メールアドレスは8文字以上であること</li>
+                    <li>大文字、小文字、数値はそれぞれ1文字以上であること</li>
+                    <li>よく使われる、かつ推測しやすいフレーズは使わないこと</li>
                 </ul>
             `;
         }
@@ -206,9 +206,9 @@ registerForm.addEventListener('submit', function (e) {
         users.push(user);
         localStorage.setItem('users', JSON.stringify(users));
         Swal.fire({
-            title: 'Login succeeded',
+            title: 'アカウント登録は完了です',
             confirmButtonColor: '#1877f2',
-            confirmButtonText: 'Login'
+            confirmButtonText: 'ログインへ'
         }).then((result) => {
             if (result.isConfirmed) {
                 document.location.href = '../html/login.html';
@@ -246,7 +246,7 @@ loginForm.addEventListener('submit', (e) => {
 
     if (emailVal == '') {
         loginEmail.classList.add('error');
-        loginEmailError.innerText = 'Email address cannot be empty';
+        loginEmailError.innerText = 'メールアドレスは必須項目です';
     } else {
         clearLoginError();
         // check if user with inputed email exists or not
@@ -254,25 +254,26 @@ loginForm.addEventListener('submit', (e) => {
         console.log(user);
         if (user === undefined) {
             loginEmail.classList.add('error');
-            loginEmailError.innerText = 'No user registered with this email';
+            loginEmailError.innerText = '該当するユーザーは存在しません';
         } else {
             clearLoginError();
             if (user.password !== pwVal) {
                 loginPassword.classList.add('error');
-                loginPwError.innerText = 'Password did not match.';
+                loginPwError.innerText = 'パスワードは間違いました';
             } else {
                 clearLoginError();
                 if (user.status !== 1) {
                     loginEmail.classList.add('error');
-                    loginEmailError.innerText = 'Your account was blocked. Please contact your admin';
+                    loginEmailError.innerText = 'ユーザーは無効です。Adminに連絡してください';
                 } else {
                     clearLoginError();
                     user.isLogin = true;
                     localStorage.setItem('loginUser', JSON.stringify(user));
                     Swal.fire({
-                        title: 'Login succeeded',
+                        title: 'ログイン',
+                        text: 'ログインは成功しました。',
                         confirmButtonColor: '#1877f2',
-                        confirmButtonText: 'Access home feeds'
+                        confirmButtonText: 'ホームフィードへ'
                     }).then((result) => {
                         if (result.isConfirmed) {
                             document.location.href = '../html/home.html';

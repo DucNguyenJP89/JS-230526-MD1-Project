@@ -540,6 +540,10 @@ body {
     color: #1877f2;
 }
 
+.feed-item-action-like.clicked span {
+    color: #1877f2;
+}
+
 .feed-item-action-like:hover, .feed-item-action-comment:hover {
     background-color: #dedde1;
     border-radius: 8px;
